@@ -57,7 +57,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const gain = ctx.createGain();
       
       oscillator.type = "sine";
-      oscillator.frequency.setValueAtTarget(getFrequency(song), ctx.currentTime, 0.01);
+      oscillator.frequency.value = getFrequency(song);
       
       // Add gentle vibrato
       const lfo = ctx.createOscillator();
