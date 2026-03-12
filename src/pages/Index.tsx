@@ -95,7 +95,7 @@ const Index = () => {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
                 {languages.map((lang, i) => (
                   <Link key={lang} to={`/languages?lang=${lang}`}
-                    className={`glass-card hover-lift p-4 text-center bg-gradient-to-br ${["from-pink-100 to-rose-50", "from-rose-100 to-pink-50", "from-pink-50 to-fuchsia-100", "from-fuchsia-50 to-pink-100", "from-rose-50 to-pink-100", "from-pink-100 to-rose-100"][i % 6]}`}>
+                    className="glass-card hover-lift p-4 text-center pink-gradient-soft">
                     <span className="font-display font-bold text-foreground">{lang}</span>
                   </Link>
                 ))}
@@ -121,8 +121,8 @@ const Index = () => {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {playlists.slice(0, 4).map(pl => (
                   <Link key={pl.id} to={`/playlists?id=${pl.id}`} className="glass-card hover-lift p-4">
-                    <div className={`aspect-square rounded-lg bg-gradient-to-br ${pl.coverColor} flex items-center justify-center mb-3`}>
-                      <Music className="h-10 w-10 text-primary-foreground/60" />
+                    <div className="aspect-square rounded-lg overflow-hidden mb-3">
+                      <img src={pl.coverImage} alt={pl.name} className="w-full h-full object-cover" />
                     </div>
                     <h3 className="font-semibold text-sm">{pl.name}</h3>
                     <p className="text-xs text-muted-foreground">{pl.description}</p>

@@ -1,3 +1,12 @@
+import coverLove from "@/assets/covers/love.jpg";
+import coverMelody from "@/assets/covers/melody.jpg";
+import coverSad from "@/assets/covers/sad.jpg";
+import coverHappy from "@/assets/covers/happy.jpg";
+import coverDevotional from "@/assets/covers/devotional.jpg";
+import coverPop from "@/assets/covers/pop.jpg";
+import coverClassical from "@/assets/covers/classical.jpg";
+import coverTrending from "@/assets/covers/trending.jpg";
+
 export interface Song {
   id: string;
   title: string;
@@ -5,7 +14,9 @@ export interface Song {
   language: string;
   mood: string;
   duration: string;
+  durationSec: number;
   coverColor: string;
+  coverImage: string;
   trending?: boolean;
   latest?: boolean;
 }
@@ -16,7 +27,19 @@ export interface Playlist {
   description: string;
   songIds: string[];
   coverColor: string;
+  coverImage: string;
 }
+
+const moodCovers: Record<string, string> = {
+  Melody: coverMelody,
+  Love: coverLove,
+  Sad: coverSad,
+  Happy: coverHappy,
+  Devotional: coverDevotional,
+  Pop: coverPop,
+  Classical: coverClassical,
+  Trending: coverTrending,
+};
 
 const colors = [
   "from-pink-400 to-rose-300",
@@ -31,65 +54,78 @@ const colors = [
 
 const c = (i: number) => colors[i % colors.length];
 
+const parseDuration = (d: string): number => {
+  const [m, s] = d.split(":").map(Number);
+  return m * 60 + s;
+};
+
+const makeSong = (id: string, title: string, artist: string, language: string, mood: string, duration: string, colorIdx: number, trending?: boolean, latest?: boolean): Song => ({
+  id, title, artist, language, mood, duration,
+  durationSec: parseDuration(duration),
+  coverColor: c(colorIdx),
+  coverImage: moodCovers[mood] || coverMelody,
+  trending, latest,
+});
+
 export const songs: Song[] = [
   // English
-  { id: "e1", title: "Moonlit Dreams", artist: "Luna Rivers", language: "English", mood: "Melody", duration: "3:45", coverColor: c(0), trending: true },
-  { id: "e2", title: "Heartbeat", artist: "Aria Cole", language: "English", mood: "Love", duration: "4:12", coverColor: c(1), latest: true },
-  { id: "e3", title: "Rainy Window", artist: "Eliot James", language: "English", mood: "Sad", duration: "3:58", coverColor: c(2) },
-  { id: "e4", title: "Sunshine Dance", artist: "Melody Park", language: "English", mood: "Happy", duration: "3:22", coverColor: c(3), trending: true },
-  { id: "e5", title: "Divine Grace", artist: "Angel Choir", language: "English", mood: "Devotional", duration: "5:01", coverColor: c(4) },
-  { id: "e6", title: "Neon Nights", artist: "Pop Galaxy", language: "English", mood: "Pop", duration: "3:15", coverColor: c(5), latest: true },
-  { id: "e7", title: "Sonata in Pink", artist: "Clara Bennett", language: "English", mood: "Classical", duration: "6:30", coverColor: c(6) },
-  { id: "e8", title: "Viral Vibes", artist: "TrendSetter", language: "English", mood: "Trending", duration: "2:55", coverColor: c(7), trending: true },
+  makeSong("e1", "Moonlit Dreams", "Luna Rivers", "English", "Melody", "3:45", 0, true),
+  makeSong("e2", "Heartbeat", "Aria Cole", "English", "Love", "4:12", 1, false, true),
+  makeSong("e3", "Rainy Window", "Eliot James", "English", "Sad", "3:58", 2),
+  makeSong("e4", "Sunshine Dance", "Melody Park", "English", "Happy", "3:22", 3, true),
+  makeSong("e5", "Divine Grace", "Angel Choir", "English", "Devotional", "5:01", 4),
+  makeSong("e6", "Neon Nights", "Pop Galaxy", "English", "Pop", "3:15", 5, false, true),
+  makeSong("e7", "Sonata in Pink", "Clara Bennett", "English", "Classical", "6:30", 6),
+  makeSong("e8", "Viral Vibes", "TrendSetter", "English", "Trending", "2:55", 7, true),
   // Hindi
-  { id: "h1", title: "Tere Bina", artist: "Arijit Singh", language: "Hindi", mood: "Love", duration: "4:30", coverColor: c(0), trending: true },
-  { id: "h2", title: "Dil Ki Baat", artist: "Shreya Ghoshal", language: "Hindi", mood: "Melody", duration: "4:15", coverColor: c(1), latest: true },
-  { id: "h3", title: "Aankhon Mein", artist: "Atif Aslam", language: "Hindi", mood: "Sad", duration: "4:48", coverColor: c(2) },
-  { id: "h4", title: "Nachle", artist: "Badshah", language: "Hindi", mood: "Happy", duration: "3:10", coverColor: c(3), trending: true },
-  { id: "h5", title: "Om Namah", artist: "Shankar M.", language: "Hindi", mood: "Devotional", duration: "5:30", coverColor: c(4) },
-  { id: "h6", title: "Rang De", artist: "Neha Kakkar", language: "Hindi", mood: "Pop", duration: "3:25", coverColor: c(5), latest: true },
-  { id: "h7", title: "Raag Yaman", artist: "Pandit Jasraj", language: "Hindi", mood: "Classical", duration: "8:00", coverColor: c(6) },
-  { id: "h8", title: "Trending Bollywood", artist: "Various", language: "Hindi", mood: "Trending", duration: "3:40", coverColor: c(7), trending: true },
+  makeSong("h1", "Tere Bina", "Arijit Singh", "Hindi", "Love", "4:30", 0, true),
+  makeSong("h2", "Dil Ki Baat", "Shreya Ghoshal", "Hindi", "Melody", "4:15", 1, false, true),
+  makeSong("h3", "Aankhon Mein", "Atif Aslam", "Hindi", "Sad", "4:48", 2),
+  makeSong("h4", "Nachle", "Badshah", "Hindi", "Happy", "3:10", 3, true),
+  makeSong("h5", "Om Namah", "Shankar M.", "Hindi", "Devotional", "5:30", 4),
+  makeSong("h6", "Rang De", "Neha Kakkar", "Hindi", "Pop", "3:25", 5, false, true),
+  makeSong("h7", "Raag Yaman", "Pandit Jasraj", "Hindi", "Classical", "8:00", 6),
+  makeSong("h8", "Trending Bollywood", "Various", "Hindi", "Trending", "3:40", 7, true),
   // Telugu
-  { id: "t1", title: "Premaloo", artist: "Sid Sriram", language: "Telugu", mood: "Love", duration: "4:20", coverColor: c(0), latest: true },
-  { id: "t2", title: "Manasu Maree", artist: "Anurag Kulkarni", language: "Telugu", mood: "Melody", duration: "4:05", coverColor: c(1) },
-  { id: "t3", title: "Edhola Nee", artist: "Harika Narayan", language: "Telugu", mood: "Sad", duration: "4:35", coverColor: c(2), trending: true },
-  { id: "t4", title: "Padara Padara", artist: "Vishal M.", language: "Telugu", mood: "Happy", duration: "3:18", coverColor: c(3), latest: true },
-  { id: "t5", title: "Sri Venkatesha", artist: "SPB", language: "Telugu", mood: "Devotional", duration: "5:45", coverColor: c(4) },
-  { id: "t6", title: "Buttabomma", artist: "Armaan Malik", language: "Telugu", mood: "Pop", duration: "3:30", coverColor: c(5), trending: true },
+  makeSong("t1", "Premaloo", "Sid Sriram", "Telugu", "Love", "4:20", 0, false, true),
+  makeSong("t2", "Manasu Maree", "Anurag Kulkarni", "Telugu", "Melody", "4:05", 1),
+  makeSong("t3", "Edhola Nee", "Harika Narayan", "Telugu", "Sad", "4:35", 2, true),
+  makeSong("t4", "Padara Padara", "Vishal M.", "Telugu", "Happy", "3:18", 3, false, true),
+  makeSong("t5", "Sri Venkatesha", "SPB", "Telugu", "Devotional", "5:45", 4),
+  makeSong("t6", "Buttabomma", "Armaan Malik", "Telugu", "Pop", "3:30", 5, true),
   // Tamil
-  { id: "tm1", title: "Kanave Kanave", artist: "Anirudh", language: "Tamil", mood: "Love", duration: "4:10", coverColor: c(0), trending: true },
-  { id: "tm2", title: "Ennai Noki", artist: "Sid Sriram", language: "Tamil", mood: "Melody", duration: "4:25", coverColor: c(1) },
-  { id: "tm3", title: "Po Nee Po", artist: "A.R. Rahman", language: "Tamil", mood: "Sad", duration: "4:50", coverColor: c(2), latest: true },
-  { id: "tm4", title: "Vaathi Coming", artist: "Anirudh", language: "Tamil", mood: "Happy", duration: "3:05", coverColor: c(3), trending: true },
-  { id: "tm5", title: "Thirupachi Aruvale", artist: "Hariharan", language: "Tamil", mood: "Devotional", duration: "5:15", coverColor: c(4) },
-  { id: "tm6", title: "Arabic Kuthu", artist: "Anirudh", language: "Tamil", mood: "Pop", duration: "3:35", coverColor: c(5), latest: true },
+  makeSong("tm1", "Kanave Kanave", "Anirudh", "Tamil", "Love", "4:10", 0, true),
+  makeSong("tm2", "Ennai Noki", "Sid Sriram", "Tamil", "Melody", "4:25", 1),
+  makeSong("tm3", "Po Nee Po", "A.R. Rahman", "Tamil", "Sad", "4:50", 2, false, true),
+  makeSong("tm4", "Vaathi Coming", "Anirudh", "Tamil", "Happy", "3:05", 3, true),
+  makeSong("tm5", "Thirupachi Aruvale", "Hariharan", "Tamil", "Devotional", "5:15", 4),
+  makeSong("tm6", "Arabic Kuthu", "Anirudh", "Tamil", "Pop", "3:35", 5, false, true),
   // Korean
-  { id: "k1", title: "봄날 (Spring Day)", artist: "BTS", language: "Korean", mood: "Melody", duration: "4:34", coverColor: c(0), trending: true },
-  { id: "k2", title: "사랑해 (Saranghae)", artist: "IU", language: "Korean", mood: "Love", duration: "3:50", coverColor: c(1), latest: true },
-  { id: "k3", title: "눈물 (Tears)", artist: "BIGBANG", language: "Korean", mood: "Sad", duration: "4:20", coverColor: c(2) },
-  { id: "k4", title: "Dynamite", artist: "BTS", language: "Korean", mood: "Happy", duration: "3:19", coverColor: c(3), trending: true },
-  { id: "k5", title: "How You Like That", artist: "BLACKPINK", language: "Korean", mood: "Pop", duration: "3:02", coverColor: c(5), latest: true },
+  makeSong("k1", "봄날 (Spring Day)", "BTS", "Korean", "Melody", "4:34", 0, true),
+  makeSong("k2", "사랑해 (Saranghae)", "IU", "Korean", "Love", "3:50", 1, false, true),
+  makeSong("k3", "눈물 (Tears)", "BIGBANG", "Korean", "Sad", "4:20", 2),
+  makeSong("k4", "Dynamite", "BTS", "Korean", "Happy", "3:19", 3, true),
+  makeSong("k5", "How You Like That", "BLACKPINK", "Korean", "Pop", "3:02", 5, false, true),
   // Japanese
-  { id: "j1", title: "桜 (Sakura)", artist: "Ikimono Gakari", language: "Japanese", mood: "Melody", duration: "4:40", coverColor: c(0), latest: true },
-  { id: "j2", title: "First Love", artist: "Utada Hikaru", language: "Japanese", mood: "Love", duration: "4:18", coverColor: c(1) },
-  { id: "j3", title: "涙 (Namida)", artist: "RADWIMPS", language: "Japanese", mood: "Sad", duration: "4:55", coverColor: c(2), trending: true },
-  { id: "j4", title: "Happy Song", artist: "Kenshi Yonezu", language: "Japanese", mood: "Happy", duration: "3:28", coverColor: c(3) },
-  { id: "j5", title: "Idol", artist: "YOASOBI", language: "Japanese", mood: "Pop", duration: "3:12", coverColor: c(5), trending: true, latest: true },
+  makeSong("j1", "桜 (Sakura)", "Ikimono Gakari", "Japanese", "Melody", "4:40", 0, false, true),
+  makeSong("j2", "First Love", "Utada Hikaru", "Japanese", "Love", "4:18", 1),
+  makeSong("j3", "涙 (Namida)", "RADWIMPS", "Japanese", "Sad", "4:55", 2, true),
+  makeSong("j4", "Happy Song", "Kenshi Yonezu", "Japanese", "Happy", "3:28", 3),
+  makeSong("j5", "Idol", "YOASOBI", "Japanese", "Pop", "3:12", 5, true, true),
 ];
 
 export const languages = ["English", "Hindi", "Telugu", "Tamil", "Korean", "Japanese"];
 export const moods = ["Melody", "Love", "Sad", "Happy", "Devotional", "Pop", "Classical", "Trending"];
 
 export const playlists: Playlist[] = [
-  { id: "p1", name: "Peaceful Morning", description: "Start your day with calm melodies", songIds: ["e1", "h2", "t2", "tm2", "j1"], coverColor: c(0) },
-  { id: "p2", name: "Love Forever", description: "Romantic songs across languages", songIds: ["e2", "h1", "t1", "tm1", "k2", "j2"], coverColor: c(1) },
-  { id: "p3", name: "Feel Good Vibes", description: "Upbeat tracks to lift your mood", songIds: ["e4", "h4", "t4", "tm4", "k4", "j4"], coverColor: c(3) },
-  { id: "p4", name: "K-Pop Essentials", description: "Best of Korean Pop", songIds: ["k1", "k2", "k4", "k5"], coverColor: c(4) },
-  { id: "p5", name: "Bollywood Hits", description: "Top Hindi tracks", songIds: ["h1", "h2", "h4", "h6", "h8"], coverColor: c(5) },
-  { id: "p6", name: "Soul Soother", description: "When you need calm in the storm", songIds: ["e3", "h3", "t3", "tm3", "k3", "j3"], coverColor: c(2) },
-  { id: "p7", name: "Divine Melodies", description: "Devotional songs for inner peace", songIds: ["e5", "h5", "t5", "tm5"], coverColor: c(6) },
-  { id: "p8", name: "Global Trending", description: "What the world is listening to", songIds: ["e8", "h8", "t6", "tm4", "k4", "j5"], coverColor: c(7) },
+  { id: "p1", name: "Peaceful Morning", description: "Start your day with calm melodies", songIds: ["e1", "h2", "t2", "tm2", "j1"], coverColor: c(0), coverImage: coverMelody },
+  { id: "p2", name: "Love Forever", description: "Romantic songs across languages", songIds: ["e2", "h1", "t1", "tm1", "k2", "j2"], coverColor: c(1), coverImage: coverLove },
+  { id: "p3", name: "Feel Good Vibes", description: "Upbeat tracks to lift your mood", songIds: ["e4", "h4", "t4", "tm4", "k4", "j4"], coverColor: c(3), coverImage: coverHappy },
+  { id: "p4", name: "K-Pop Essentials", description: "Best of Korean Pop", songIds: ["k1", "k2", "k4", "k5"], coverColor: c(4), coverImage: coverPop },
+  { id: "p5", name: "Bollywood Hits", description: "Top Hindi tracks", songIds: ["h1", "h2", "h4", "h6", "h8"], coverColor: c(5), coverImage: coverTrending },
+  { id: "p6", name: "Soul Soother", description: "When you need calm in the storm", songIds: ["e3", "h3", "t3", "tm3", "k3", "j3"], coverColor: c(2), coverImage: coverSad },
+  { id: "p7", name: "Divine Melodies", description: "Devotional songs for inner peace", songIds: ["e5", "h5", "t5", "tm5"], coverColor: c(6), coverImage: coverDevotional },
+  { id: "p8", name: "Global Trending", description: "What the world is listening to", songIds: ["e8", "h8", "t6", "tm4", "k4", "j5"], coverColor: c(7), coverImage: coverTrending },
 ];
 
 export const getSongsByLanguage = (lang: string) => songs.filter(s => s.language === lang);
