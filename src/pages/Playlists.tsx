@@ -21,8 +21,8 @@ const Playlists = () => {
             onClick={() => setSelectedId(pl.id === selectedId ? "" : pl.id)}
             className={`glass-card hover-lift p-4 text-left transition-all ${selectedId === pl.id ? "ring-2 ring-primary" : ""}`}
           >
-            <div className={`aspect-square rounded-lg bg-gradient-to-br ${pl.coverColor} flex items-center justify-center mb-3`}>
-              <Music className="h-8 w-8 text-primary-foreground/60" />
+            <div className="aspect-square rounded-lg overflow-hidden mb-3">
+              <img src={pl.coverImage} alt={pl.name} className="w-full h-full object-cover" />
             </div>
             <h3 className="font-semibold text-sm">{pl.name}</h3>
             <p className="text-xs text-muted-foreground">{pl.description}</p>
